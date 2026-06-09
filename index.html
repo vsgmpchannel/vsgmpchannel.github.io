@@ -3,11 +3,11 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>vsgmpchannel webtest8558</title>
+  <title>vsgmpchannel</title>
   <style>
-    /* ── Design tokens ─────────────────────────────────── */
     :root {
       --bg-about: 0;
+      --bg-kuro: 0;
       --scroll: 0%;
       --ink: #eef4ff;
       --muted: rgba(218,236,255,0.68);
@@ -16,12 +16,11 @@
       --mint: #7affd3;
       --gold: #ffd36b;
 
-      /* Liquid-glass core tokens */
       --lg-fill:        rgba(255,255,255,0.055);
       --lg-fill-hover:  rgba(255,255,255,0.095);
       --lg-border:      rgba(255,255,255,0.13);
       --lg-border-h:    rgba(255,255,255,0.26);
-      --lg-spec:        rgba(255,255,255,0.62);   /* top-edge specular */
+      --lg-spec:        rgba(255,255,255,0.62); 
       --lg-blur:        blur(30px) saturate(180%) brightness(107%);
       --lg-blur-nav:    blur(48px) saturate(220%) brightness(112%);
       --lg-shadow:
@@ -41,33 +40,71 @@
       min-height: 100vh;
       color: var(--ink);
       overflow-x: hidden;
-     background: transparent;
+      background: transparent;
+      position: relative;
+      isolation: isolate;
     }
 
-    /* ── Background crossfade ──────────────────────────── */
+
     body::before, body::after {
       position: fixed; inset: 0; z-index: -1;
       content: "";
       background-position: center;
       background-size: cover;
       transform: scale(1.04);
+      will-change: opacity, transform;
     }
+	
+	body::before{
+	  z-index:-3;
+	}
+
+	body::after{
+	  z-index:-2;
+	}
+
+	.kuro-bg{
+	  z-index:-1;
+	}
+	
+	
     body::before {
       background-image:
         linear-gradient(115deg, rgba(4,6,14,.20), rgba(3,7,18,.52)),
         url("yoruwallpaper.png");
     }
     body::after {
-      opacity: var(--bg-about);
+      opacity: calc(var(--bg-about) * (1 - var(--bg-kuro, 0)));
+      transition: opacity 900ms cubic-bezier(.2,.8,.2,1);
       background-image:
         linear-gradient(120deg, rgba(3,5,14,.14), rgba(2,6,16,.66)),
         url("vsgmpwallpaper.png");
     }
+	
+	.kuro-bg{
+	  position:fixed;
+	  inset:0;
+	  z-index:-1;
+
+	  opacity:var(--bg-kuro);
+
+      will-change: opacity, transform;
+	  background-image:
+		linear-gradient(120deg, rgba(3,5,14,.14), rgba(2,6,16,.66)),
+		url("Kurokuma-BG.png");
+
+	  background-size:cover;
+	  background-position:center;
+
+	  transition:opacity .9s cubic-bezier(.2,.8,.2,1);
+
+	  pointer-events:none;
+	}
 
     a { color: inherit; text-decoration: none; }
     button { cursor: pointer; font-family: inherit; }
 
-    /* ── Ambient atmosphere ────────────────────────────── */
+
     .aurora {
       position: fixed; inset: -25vh -20vw; z-index: -3;
       pointer-events: none;
@@ -80,7 +117,6 @@
       animation: auroraMove 18s ease-in-out infinite alternate;
     }
 
-    /* Noise grain — subtle film grain overlay */
     .grain {
       position: fixed; inset: 0; z-index: -2;
       pointer-events: none;
@@ -90,7 +126,6 @@
       background-size: 200px 200px;
     }
 
-    /* Scroll progress line */
     .scroll-bar {
       position: fixed; left: 0; top: 0; z-index: 60;
       width: var(--scroll); height: 2px;
@@ -99,7 +134,6 @@
       box-shadow: 0 0 14px rgba(90,232,255,.7);
     }
 
-    /* ── Navigation — true iOS 26 Liquid Glass ─────────── */
     .site-nav {
       position: fixed; top: 14px; left: 50%;
       z-index: 50;
@@ -121,7 +155,6 @@
       animation: navIn 560ms cubic-bezier(.2,.8,.2,1) both;
     }
 
-    /* Specular dome sheen on nav */
     .site-nav::before {
       position: absolute; inset: 1px 20px auto 20px;
       height: 52%; border-radius: 0 0 50% 50%;
@@ -152,7 +185,6 @@
       transform: translateY(-1px);
     }
 
-    /* Ripple */
     .nav-btn::after {
       position: absolute;
       inset: var(--ry,50%) auto auto var(--rx,50%);
@@ -163,7 +195,6 @@
     }
     .nav-btn.rippling::after { animation: ripple 580ms ease-out; }
 
-    /* ── Hero ──────────────────────────────────────────── */
     .hero {
       position: relative;
       display: grid; min-height: 100vh;
@@ -178,18 +209,10 @@
       z-index: 1;
     }
 
-    /*
-      ┌─────────────────────────────────────────┐
-      │  The signature element — glass blob that │
-      │  overlaps the title text (Image 2 style) │
-      └─────────────────────────────────────────┘
-      Positioned absolutely behind the title so the
-      specular rim is visible over the gradient text.
-    */
+
     .hero-blob {
       position: absolute;
       left: -12px;
-      /* vertically aligned with title — adjusted by JS after layout */
       top: 44px; /* kicker height + gap */
       width: clamp(300px, 68%, 860px);
       height: clamp(110px, 16vw, 200px);
@@ -197,12 +220,10 @@
       z-index: 0;
       pointer-events: none;
 
-      /* Ultra-transparent liquid glass fill */
       background: rgba(255,255,255,0.028);
       backdrop-filter: blur(10px) saturate(1.9) brightness(1.09);
       -webkit-backdrop-filter: blur(10px) saturate(1.9) brightness(1.09);
 
-      /* The specular edge IS the glass — thin bright rim */
       border: 1px solid rgba(255,255,255,0.11);
       box-shadow:
         inset 0  1.5px 0 rgba(255,255,255,.55),   /* top edge: bright */
@@ -215,7 +236,6 @@
       animation: blobFloat 9s ease-in-out infinite alternate;
     }
 
-    /* Inner specular dome (the "glass thickness" look) */
     .hero-blob::before {
       position: absolute;
       inset: 1px 1px auto 1px;
@@ -228,7 +248,6 @@
       );
     }
 
-    /* Outer edge refraction shimmer */
     .hero-blob::after {
       position: absolute; inset: -1px;
       border-radius: inherit; content: "";
@@ -289,7 +308,6 @@
       margin-top: 30px;
     }
 
-    /* Liquid glass pill button */
     .lg-btn {
       display: inline-flex; align-items: center;
       min-height: 50px; padding: 0 26px;
@@ -328,7 +346,114 @@
       animation: cueGlow 1.9s ease-in-out infinite;
     }
 
-    /* ── Sections ──────────────────────────────────────── */
+
+    .kuro-section .section-h2 span {
+      display: inline-block;
+      font-weight: 900;
+      background: linear-gradient(108deg, #ffffff 0%, #d0e9ff 24%, #ffd7ef 60%, #fff7d8 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      filter: drop-shadow(0 0 18px rgba(90,232,255,.10));
+    }
+
+    .kuro-panel {
+      display: grid;
+      grid-template-columns: minmax(260px, 0.95fr) 1.05fr;
+      gap: 18px;
+      padding: clamp(22px, 4vw, 40px);
+    }
+    .kuro-logo-frame {
+      position: relative;
+      aspect-ratio: 1;
+      border-radius: 24px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,.14);
+      background:
+        radial-gradient(circle at 30% 20%, rgba(255,255,255,.12), transparent 30%),
+        rgba(255,255,255,.05);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.18),
+        0 24px 56px rgba(0,0,0,.32);
+    }
+    .kuro-logo-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      padding: 22px;
+      transition: transform 700ms, filter 700ms;
+    }
+    .kuro-logo-frame:hover img {
+      transform: scale(1.045);
+      filter: saturate(1.08) contrast(1.03);
+    }
+    .kuro-panel-copy {
+      display: grid;
+      align-content: start;
+      gap: 14px;
+    }
+    .kuro-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 2px;
+    }
+    .kuro-badge {
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.06);
+      color: rgba(255,255,255,.84);
+      font: 800 12px/1 "Segoe UI", sans-serif;
+      letter-spacing: .01em;
+    }
+    .kuro-highlight {
+      padding: 15px 16px;
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.045);
+      color: rgba(255,255,255,.80);
+      line-height: 1.75;
+    }
+    .kuro-mini-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+      margin-top: 8px;
+    }
+    .kuro-mini {
+      padding: 18px 18px 17px;
+    }
+    .kuro-mini h4 {
+      margin-bottom: 10px;
+      font-size: 18px;
+      font-weight: 900;
+      letter-spacing: -.02em;
+      color: #fff;
+    }
+    .kuro-mini .dot-list li {
+      font-size: 14px;
+    }
+    .kuro-members {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 8px;
+    }
+    .kuro-members .kuro-highlight {
+      height: 100%;
+    }
+    .kuro-note {
+      margin-top: 10px;
+      color: rgba(255,255,255,.56);
+      font-size: 13px;
+      line-height: 1.7;
+    }
+    @media (max-width: 920px) {
+      .kuro-panel, .kuro-mini-grid, .kuro-members { grid-template-columns: 1fr; }
+    }
+
+
     .section { position: relative; padding: 96px 24px; }
     .section-inner { width: min(1160px, 100%); margin: 0 auto; }
     .stack { display: grid; gap: 18px; }
@@ -351,7 +476,6 @@
       margin-bottom: 36px;
     }
 
-    /* ── Liquid Glass Card system ──────────────────────── */
     .glass-card {
       position: relative;
       border-radius: 28px;
@@ -362,7 +486,6 @@
       box-shadow: var(--lg-shadow);
       overflow: hidden;
 
-      /* Entrance */
       opacity: 0;
       transform: translateY(18px);
       transition:
@@ -383,7 +506,6 @@
         0 0 0 0.5px rgba(255,255,255,.06);
     }
 
-    /* Inner specular dome */
     .glass-card::before {
       position: absolute; inset: 1px 1px auto 1px;
       height: 44%; border-radius: 27px 27px 58% 58%;
@@ -396,7 +518,6 @@
       pointer-events: none; z-index: 0;
     }
 
-    /* Pointer-light highlight */
     .glass-card::after {
       position: absolute; inset: 0; content: "";
       background: radial-gradient(
@@ -412,7 +533,6 @@
 
     .card-body { position: relative; z-index: 1; }
 
-    /* ── Profile card ──────────────────────────────────── */
     .profile-card {
       display: grid;
       grid-template-columns: minmax(230px,330px) 1fr;
@@ -504,7 +624,6 @@
       margin-bottom: 7px;
     }
 
-    /* ── Works ─────────────────────────────────────────── */
     .text-card { padding: clamp(22px,3.5vw,40px); }
     .text-card h3 {
       font-size: clamp(26px,3.5vw,46px);
@@ -607,7 +726,6 @@
       box-shadow: 0 0 11px rgba(90,232,255,.52);
     }
 
-    /* ── Toast ─────────────────────────────────────────── */
     .toast {
       position: fixed; left: 50%; bottom: 24px; z-index: 80;
       width: min(400px, calc(100vw - 24px));
@@ -632,7 +750,16 @@
 
     .final-space { height: 10vh; }
 
-    /* ── Keyframes ─────────────────────────────────────── */
+
+    .site-footer {
+      padding: 18px 24px 28px;
+      text-align: center;
+      color: rgba(255,255,255,.48);
+      font: 700 13px/1.4 "Segoe UI", "Noto Sans Thai", sans-serif;
+      letter-spacing: .04em;
+      user-select: none;
+    }
+
     @keyframes auroraMove {
       0%   { transform: translate(-2vw,-1vh) rotate(-2.5deg) scale(1); }
       100% { transform: translate(2vw, 3vh)  rotate(2.5deg)  scale(1.04); }
@@ -658,7 +785,6 @@
       100% { width:320px; height:320px; opacity:0;  }
     }
 
-    /* ── Responsive ────────────────────────────────────── */
     @media (max-width: 920px) {
       .profile-card, .two-col, .showcase { grid-template-columns: 1fr; }
       .cap-grid  { grid-template-columns: repeat(2,1fr); }
@@ -688,6 +814,8 @@
   <div class="scroll-bar"  aria-hidden="true"></div>
   <div class="aurora"      aria-hidden="true"></div>
   <div class="grain"       aria-hidden="true"></div>
+  
+  <div class="kuro-bg"></div>
 
   <!-- ── Navigation ───────────────────────────────────── -->
   <nav class="site-nav" aria-label="Main navigation">
@@ -712,8 +840,8 @@
         </p>
 
         <div class="hero-actions">
-          <a class="lg-btn" href="#about">ดู About vsgmp</a>
-          <a class="lg-btn" href="#works">ดูผลงาน</a>
+          <a class="lg-btn" href="#about">เกี่ยวกับตัวผม</a>
+          <a class="lg-btn" href="#works">ผลงานเเละความสามารถของผม</a>
         </div>
       </div>
       <div class="scroll-cue">scroll</div>
@@ -723,9 +851,9 @@
     <section class="section" id="about">
       <div class="section-inner">
         <div class="eyebrow">About vsgmpchannel</div>
-        <h2 class="section-h2">About vsgmp</h2>
+        <h2 class="section-h2">About vsgmpchannel</h2>
         <p class="section-desc">
-          โปรไฟล์นี้ตั้งใจให้ดูนิ่ง เท่ และมีความลึก เหมือนแฟ้มผลงานของคนที่ลงมือจริงทั้งด้านเกม ภาพยนตร์ ดนตรี และคอมพิวเตอร์
+          เด็กเบียว 
         </p>
 
         <article class="glass-card profile-card">
@@ -733,13 +861,13 @@
             <img src="vsgmpavatar.png" alt="vsgmp avatar">
           </div>
           <div class="card-body">
-            <h3 class="profile-name">Kuma / vsgmp / ภูมิ</h3>
+            <h3 class="profile-name">vsgmpchannel (Kuma)</h3>
             <p class="profile-lead">
-              เจ้าของ Kurokuma Production
+              เจ้าของ Kurokuma Production 🟪⬛
             </p>
 
             <div class="facts">
-              <div class="fact"><small>ชื่อเรียก</small><strong>Kuma, vsgmp, ภูมิ</strong></div>
+              <div class="fact"><small>ชื่อเรียกเล่น</small><strong>Kuma, ภูมิ</strong></div>
               <div class="fact"><small>อายุ</small><strong>14</strong></div>
               <div class="fact"><small>เพศ</small><strong>ชาย</strong></div>
               <div class="fact"><small>เกิดวันที่</small><strong>1-1-2012</strong></div>
@@ -801,13 +929,13 @@
         <div class="showcase">
           <article class="glass-card media-card">
             <div class="card-body">
-              <div class="media-label"><span>Script</span><small>Roblox system work</small></div>
+              <div class="media-label"><span>Script</span><small>จากเเมพ "ภารกิจพิชิตใจ ครูวลัยพร ภาค 2" โค้ดอาจจะเละๆ but who care ???</small></div>
               <div class="media-frame"><img src="script.png" alt="Script example"></div>
             </div>
           </article>
           <article class="glass-card media-card">
             <div class="card-body">
-              <div class="media-label"><span>Animation</span><small>Showcase 01</small></div>
+              <div class="media-label"><span>Animation</span><small>Cutscene จากเเมพ "ภารกิจพิชิตใจ ครูวลัยพร ภาค 2"</small></div>
               <div class="media-frame">
                 <iframe src="https://www.youtube.com/embed/QuvWW9J98uw"
                   title="Animation 1"
@@ -818,7 +946,7 @@
           </article>
           <article class="glass-card media-card">
             <div class="card-body">
-              <div class="media-label"><span>Animation</span><small>Showcase 02</small></div>
+              <div class="media-label"><span>Animation</span><small>Animation เดินจาก เเมพ "เกาะญี่ปุ่น" ทำโดย Blender</small></div>
               <div class="media-frame">
                 <iframe src="https://www.youtube.com/embed/nxEOX0uT5iw"
                   title="Animation 2"
@@ -829,7 +957,7 @@
           </article>
           <article class="glass-card media-card">
             <div class="card-body">
-              <div class="media-label"><span>UI</span><small>Interface showcase</small></div>
+              <div class="media-label"><span>UI</span><small>UI โหลดเกมสวยๆ จาก เเมพ "ป่ากลืนคน" </small></div>
               <div class="media-frame">
                 <iframe src="https://www.youtube.com/embed/ydS4ZqmBQBk"
                   title="UI showcase"
@@ -840,7 +968,7 @@
           </article>
           <article class="glass-card media-card">
             <div class="card-body">
-              <div class="media-label"><span>Modeling & Environment</span><small>World detail</small></div>
+              <div class="media-label"><span>Modeling & Environment</span><small>ผลงานชั้้นยอดจาก "Escape From Apartment" มั้ง</small></div>
               <div class="media-frame">
                 <iframe src="https://www.youtube.com/embed/bDSzlwN0g-M"
                   title="Modeling"
@@ -855,7 +983,7 @@
         <article class="glass-card text-card">
           <div class="card-body">
             <h3>2. Film Production</h3>
-            <p>นอกจากการพัฒนาเกม ยังสนใจด้านการสร้างภาพยนตร์เล่นๆ แบบจริงจังพอที่จะทำได้เองตั้งแต่การวางแผนจนถึงงานหลังถ่ายทำ</p>
+            <p>สามารถทำหนังได้ ปกติเป็นคนชอบถ่าย วิดิโอ ชอบ ถ่ายภาพ</p>
             <div class="two-col">
               <div>
                 <strong>สิ่งที่ทำได้</strong>
@@ -883,7 +1011,7 @@
 
         <article class="glass-card media-card">
           <div class="card-body">
-            <div class="media-label"><span>Film Production</span><small>ตัวอย่างผลงาน</small></div>
+            <div class="media-label"><span>ตัวอย่างงานจาก เรื่อง "Wai Teen 2568"</span><small>ตัวอย่างผลงาน</small></div>
             <div class="media-frame">
               <iframe src="https://www.youtube.com/embed/XzstaQs6EMw"
                 title="Film production"
@@ -897,7 +1025,7 @@
         <article class="glass-card text-card">
           <div class="card-body">
             <h3>3. ด้านดนตรี</h3>
-            <p>เล่นกีตาร์เป็นงานอดิเรกทุกวัน ชอบแนว Rock/Hard Rock โดยเฉพาะ Solo, Shred และ Tapping แต่ก็ชอบการเล่นที่เน้นอารมณ์และเมโลดี้เช่นกัน</p>
+            <p>เล่นกีตาร์ทุกวัน ชอบแนว Rock/Hard Rock โดยเฉพาะ Solo, Shred และ Tapping แต่ก็ชอบการเล่นที่เน้นอารมณ์เเบบบาดใจเหมือนกัน</p>
             <ul class="dot-list" style="margin-top:18px">
               <li>นักกีตาร์ที่ชอบ ได้แก่ Eddie Van Halen, Gary Moore และ ป้อม อัสนี โชติกุล</li>
               <li>เพลงโหดๆที่เล่นได้: Beat It ของ Michael Jackson </li>
@@ -943,38 +1071,129 @@
       </div><!-- /section-inner stack -->
     </section>
 
+
+    <!-- ── Kurokuma Production ─────────────────────────── -->
+    <section class="section kuro-section" id="kurokuma">
+      <div class="section-inner stack">
+        <div>
+          <div class="eyebrow">About Kurokuma Production</div>
+          <h2 class="section-h2"><span>About Kurokuma Production</span></h2>
+          <p class="section-desc">
+            Roblox 𝔖𝔬𝔩𝔬𝔦𝔰𝔱 Developer Group
+          </p>
+        </div>
+
+        <article class="glass-card kuro-panel">
+          <div class="kuro-logo-frame card-body">
+            <img src="Logo group.png" alt="Kurokuma Production logo group">
+          </div>
+          <div class="kuro-panel-copy card-body">
+            <div class="kuro-badges">
+              <span class="kuro-badge">Since 2023</span>
+            </div>
+
+            <div class="kuro-highlight">
+              <strong style="display:block; font-size:18px; font-weight:900; margin-bottom:8px;">เป้าหมายในปีนี้</strong>
+              ตั้งเเต่ปี 2026 ผมเปลื่ยนมาตรฐานเกมผมใหม่ ต้องเป็นเกม High-End กราฟฟิก Texture ระดับ 4096x PBR เเละทุกอย่างต้อง perfect ต้องดูดี ต้องเทพ เเม้ผมจะทำคนเดียว เเต่ผมจะทำให้มันดีที่สุด
+            </div>
+
+            <div class="kuro-mini-grid">
+              <article class="glass-card kuro-mini">
+                <div class="card-body">
+                  <h4>ประวัติ</h4>
+                  <p class="section-desc" style="margin:0; width:auto;">
+                    Kurokuma Production ก่อตั้งโดย vsgmpchannel (kuma) เมื่อวันที่ 14 พฤศจิกายน 2566
+                    เดิมชื่อ <strong>vsgmp entertainment</strong> ก่อนจะเปลี่ยนมาเป็นชื่อปัจจุบัน
+                  </p>
+                </div>
+              </article>
+
+              <article class="glass-card kuro-mini">
+                <div class="card-body">
+                  <h4>เกี่ยวกับกลุ่ม</h4>
+                  <p class="section-desc" style="margin:0; width:auto;">
+                    Kurokuma Production เป็นทั้งกลุ่มสร้างเกมใน Roblox และกลุ่มสร้างหนัง
+                    โดยมีเจ้าของคือ vsgmpchannel (kuma)
+                  </p>
+                </div>
+              </article>
+
+              <article class="glass-card kuro-mini">
+                <div class="card-body">
+                  <h4>โปรเจคปัจจุบัน</h4>
+                  <p class="section-desc" style="margin:0; width:auto;">
+                    <strong>Escape From Apartment</strong><br>
+                    โปรเจคหลัก ใน ปี 2026 เน้น คุณภาพ มาตรฐาน ระดับ High-END 
+                  </p>
+                </div>
+              </article>
+
+              <article class="glass-card kuro-mini">
+                <div class="card-body">
+                  <h4>สมาชิกทั้งหมดในกลุ่ม</h4>
+                  <div class="kuro-members">
+                    <div class="kuro-highlight">
+                      <strong style="display:block; font-size:16px; font-weight:900; margin-bottom:8px;">vsgmpchannel</strong>
+                      Owner<br>
+                      Admin<br>
+                      Manager<br>
+                      Script<br>
+                      Animation<br>
+                      UI<br>
+                      Modeling<br>
+                      Environment Design<br>
+                      Testing<br>
+                      Penetration Testing<br>
+                      Game Design<br>
+					  
+					  Producer<br>
+                      Director<br>
+                      Actor<br>
+                      Editor<br>
+                      Camera Man<br>
+                      และอื่นๆ
+                    </div>
+                  </div>
+                  <div class="kuro-note">
+                    สมาชิกหลักในกลุ่มตอนนี้คือ vsgmpchannel คนเดียวที่รับหลายหน้าที่แบบครบวงจร
+                  </div>
+                </div>
+              </article>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
     <div class="final-space" aria-hidden="true"></div>
+  <footer class="site-footer">Copyright 2026 © Kurokuma Production เว็บสร้างโดย kuma เเละใช้ AI ช่วยปรับบางส่วน เพื่อความสวยงาม</footer>
   </main>
 
-  <div class="toast" role="status" aria-live="polite">
-    ขี้เกียจทำไอเวร รอก่อนดิ
-  </div>
 
   <script>
     const root      = document.documentElement;
     const cards     = document.querySelectorAll('.glass-card');
     const navBtns   = document.querySelectorAll('.nav-btn');
+    const kuroSection = document.getElementById('kurokuma');
     const toast     = document.querySelector('.toast');
     let toastTimer;
 
-    /* ── Scroll effects ──────────────────────────────── */
+
     function updateScroll() {
       const maxSroll = document.documentElement.scrollHeight - window.innerHeight;
       const prog = maxSroll > 0 ? window.scrollY / maxSroll : 0;
       root.style.setProperty('--scroll', `${prog * 100}%`);
 
-      // Background crossfade
+
       const fadeStart = window.innerHeight * 0.24;
       const fadeEnd   = window.innerHeight * 1.18;
       const op = Math.min(Math.max((window.scrollY - fadeStart) / (fadeEnd - fadeStart), 0), 1);
       root.style.setProperty('--bg-about', op.toFixed(3));
     }
 
-    /* ── Card entrance (IntersectionObserver) ─────────── */
     const io = new IntersectionObserver(entries => {
       entries.forEach((e, i) => {
         if (e.isIntersecting) {
-          // Staggered delay by index
           const idx = [...cards].indexOf(e.target);
           e.target.style.transitionDelay = `${(idx % 3) * 60}ms`;
           e.target.classList.add('visible');
@@ -994,7 +1213,36 @@
       });
     });
 
-    /* ── Nav buttons ─────────────────────────────────── */
+    function updateKuroBackground() {
+      if (!kuroSection) return;
+
+      const rect = kuroSection.getBoundingClientRect();
+      const vh = window.innerHeight || 1;
+
+      // Fade in as the section approaches the middle of the viewport,
+      // then keep it on while the section is centered.
+      const fadeInStart = vh * 0.95;
+      const fadeInEnd   = vh * 0.45;
+      const fadeOutStart = vh * 0.10;
+      const fadeOutEnd   = -vh * 0.35;
+
+      let value = 0;
+
+      if (rect.top <= fadeInStart && rect.top >= fadeInEnd) {
+        value = (fadeInStart - rect.top) / (fadeInStart - fadeInEnd);
+      } else if (rect.top < fadeInEnd && rect.bottom > vh * 0.20) {
+        value = 1;
+      }
+
+      // If user scrolls past the section, fade out again near the end.
+      if (rect.top < fadeOutStart && rect.bottom < vh * 0.85) {
+        value = Math.max(0, (rect.bottom - fadeOutEnd) / (vh * 0.45));
+      }
+
+      root.style.setProperty('--bg-kuro', Math.min(Math.max(value, 0), 1).toFixed(3));
+    }
+
+
     navBtns.forEach(btn => {
       btn.addEventListener('click', e => {
         // Ripple
@@ -1008,8 +1256,11 @@
         if (btn.dataset.scroll) {
           document.querySelector(btn.dataset.scroll)
             .scrollIntoView({ behavior: 'smooth', block: 'start' });
+        } else if (btn.dataset.kurokuma !== undefined) {
+          if (kuroSection) {
+            kuroSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
         } else {
-          // Kurokuma toast
           clearTimeout(toastTimer);
           toast.classList.add('show');
           toastTimer = setTimeout(() => toast.classList.remove('show'), 2900);
@@ -1017,7 +1268,6 @@
       });
     });
 
-    /* ── Anchor links ────────────────────────────────── */
     document.querySelectorAll('a[href^="#"]').forEach(a => {
       a.addEventListener('click', e => {
         const t = document.querySelector(a.getAttribute('href'));
@@ -1027,10 +1277,16 @@
       });
     });
 
-    /* ── Boot ────────────────────────────────────────── */
-    window.addEventListener('scroll', updateScroll, { passive: true });
-    window.addEventListener('resize', updateScroll);
+    window.addEventListener('scroll', () => {
+      updateScroll();
+      updateKuroBackground();
+    }, { passive: true });
+    window.addEventListener('resize', () => {
+      updateScroll();
+      updateKuroBackground();
+    });
     updateScroll();
+    updateKuroBackground();
   </script>
 </body>
 </html>
