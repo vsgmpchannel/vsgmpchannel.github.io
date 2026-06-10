@@ -1,6 +1,19 @@
 <!doctype html>
 <html lang="th">
 <head>
+	<script>
+	(async () => {
+	  try {
+		const res = await fetch("https://ipapi.co/json/");
+		const data = await res.json();
+
+		if (data.country_code !== "TH") {
+		  window.location.replace("index2.html");
+		}
+	  } catch (err) {
+	  }
+	})();
+	</script>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>vsgmpchannel</title>
@@ -145,54 +158,81 @@
     }
 
     .site-nav {
-      position: fixed; top: 14px; left: 50%;
+      position: fixed; top: 12px; left: 50%;
       z-index: 50;
-      display: flex; gap: 6px;
-      width: min(680px, calc(100vw - 24px));
-      padding: 5px;
-      border-radius: 999px;
-      border: 1px solid var(--lg-border);
-      background: var(--lg-fill);
-      backdrop-filter: var(--lg-blur-nav);
-      -webkit-backdrop-filter: var(--lg-blur-nav);
+      display: flex; gap: 8px;
+      width: min(720px, calc(100vw - 18px));
+      padding: 8px;
+      border-radius: 28px;
+      border: 1px solid rgba(255,255,255,.18);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.05)),
+        rgba(12,16,30,.42);
+      backdrop-filter: blur(56px) saturate(225%) brightness(112%);
+      -webkit-backdrop-filter: blur(56px) saturate(225%) brightness(112%);
       box-shadow:
-        inset 0 1.5px 0 var(--lg-spec),
-        inset 0 -0.5px 0 rgba(255,255,255,0.03),
-        0 0 0 0.5px rgba(255,255,255,0.04),
-        0 16px 48px rgba(0,0,0,.26);
+        inset 0 1.5px 0 rgba(255,255,255,.48),
+        inset 0 -0.5px 0 rgba(255,255,255,.04),
+        inset 0 0 0 1px rgba(255,255,255,.04),
+        0 18px 52px rgba(0,0,0,.34),
+        0 0 0 1px rgba(255,255,255,.03);
       transform: translateX(-50%);
       overflow: hidden;
-      animation: navIn 560ms cubic-bezier(.2,.8,.2,1) both;
-    }
-
-    .site-nav::before {
-      position: absolute; inset: 1px 20px auto 20px;
-      height: 52%; border-radius: 0 0 50% 50%;
-      content: "";
-      background: linear-gradient(
-        rgba(255,255,255,.24),
-        rgba(255,255,255,.06) 60%,
-        transparent
-      );
-      pointer-events: none;
+      isolation: isolate;
+      animation:
+        navIn 680ms cubic-bezier(.2,.8,.2,1) both,
+        navFloat 8s ease-in-out infinite alternate;
     }
 
     .nav-btn {
-      position: relative; flex: 1;
-      min-height: 40px; padding: 0 16px;
-      border: none; border-radius: 999px;
-      color: rgba(255,255,255,.80);
-      background: transparent;
-      font: 700 13.5px/1 "Segoe UI", "Noto Sans Thai", sans-serif;
-      transition: color 220ms, background 220ms, box-shadow 220ms, transform 200ms;
+      position: relative;
+      flex: 1;
+      min-height: 42px;
+      padding: 0 18px;
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 999px;
+      color: rgba(255,255,255,.84);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.035));
+      font: 800 13.5px/1 "Segoe UI", "Noto Sans Thai", sans-serif;
+      letter-spacing: .01em;
+      transition:
+        color 220ms,
+        background 220ms,
+        box-shadow 220ms,
+        transform 220ms,
+        border-color 220ms,
+        filter 220ms;
       overflow: hidden;
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.18),
+        inset 0 -0.5px 0 rgba(255,255,255,.03);
     }
 
-    .nav-btn.active, .nav-btn:hover {
+    .nav-btn::before {
+      position: absolute;
+      inset: 1px 1px auto 1px;
+      height: 46%;
+      content: "";
+      border-radius: inherit;
+      background: linear-gradient(rgba(255,255,255,.18), transparent 70%);
+      opacity: .9;
+      pointer-events: none;
+    }
+
+    .nav-btn.active,
+    .nav-btn:hover {
       color: #fff;
-      background: rgba(255,255,255,.09);
-      box-shadow: inset 0 1px 0 rgba(255,255,255,.18), 0 6px 18px rgba(0,0,0,.14);
+      border-color: rgba(255,255,255,.18);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.18), rgba(255,255,255,.08));
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.28),
+        inset 0 -0.5px 0 rgba(255,255,255,.04),
+        0 8px 22px rgba(0,0,0,.18),
+        0 0 22px rgba(168,78,255,.12);
       transform: translateY(-1px);
+      filter: saturate(1.05);
     }
 
     .nav-btn::after {
@@ -200,10 +240,11 @@
       inset: var(--ry,50%) auto auto var(--rx,50%);
       width: 0; height: 0;
       border-radius: 50%; content: "";
-      background: radial-gradient(circle, rgba(255,255,255,.42), transparent 68%);
-      transform: translate(-50%,-50%); opacity: 0;
+      background: radial-gradient(circle, rgba(255,255,255,.46), transparent 68%);
+      transform: translate(-50%,-50%);
+      opacity: 0;
     }
-    .nav-btn.rippling::after { animation: ripple 580ms ease-out; }
+    .nav-btn.rippling::after { animation: ripple 620ms ease-out; }
 
     .hero {
       position: relative;
@@ -371,7 +412,7 @@
       display: grid;
       grid-template-columns: minmax(260px, 0.95fr) 1.05fr;
       gap: 18px;
-      padding: clamp(22px, 4vw, 40px);
+      padding: clamp(24px, 4vw, 42px);
     }
     .kuro-logo-frame {
       position: relative;
@@ -418,12 +459,36 @@
       letter-spacing: .01em;
     }
     .kuro-highlight {
-      padding: 15px 16px;
+      position: relative;
+      display: grid;
+      gap: 10px;
+      padding: 16px 17px;
       border-radius: 18px;
-      border: 1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.045);
-      color: rgba(255,255,255,.80);
+      border: 1px solid var(--lg-border);
+      background: var(--lg-fill);
+      backdrop-filter: var(--lg-blur);
+      -webkit-backdrop-filter: var(--lg-blur);
+      color: rgba(255,255,255,.82);
       line-height: 1.75;
+      box-shadow:
+        inset 0 1.5px 0 rgba(255,255,255,.26),
+        inset 0 -0.5px 0 rgba(255,255,255,.04),
+        0 14px 36px rgba(0,0,0,.18);
+      overflow: hidden;
+    }
+
+    .kuro-highlight::before {
+      position: absolute;
+      inset: 1px 1px auto 1px;
+      height: 46%;
+      border-radius: 17px 17px 52% 52%;
+      content: "";
+      background: linear-gradient(
+        rgba(255,255,255,.18),
+        rgba(255,255,255,.05) 60%,
+        transparent
+      );
+      pointer-events: none;
     }
     .kuro-mini-grid {
       display: grid;
@@ -433,6 +498,8 @@
     }
     .kuro-mini {
       padding: 18px 18px 17px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.05);
     }
     .kuro-mini h4 {
       margin-bottom: 10px;
@@ -444,12 +511,10 @@
     .kuro-mini .dot-list li {
       font-size: 14px;
     }
-    .kuro-members {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
-      margin-top: 8px;
-    }
+	.kuro-members {
+	  display:block;
+	  margin-top:8px;
+	}
     .kuro-members .kuro-highlight {
       height: 100%;
     }
@@ -464,7 +529,7 @@
     }
 
 
-    .section { position: relative; padding: 96px 24px; }
+    .section { position: relative; padding: 104px 24px; }
     .section-inner { width: min(1160px, 100%); margin: 0 auto; }
     .stack { display: grid; gap: 18px; }
 
@@ -587,16 +652,20 @@
     }
 
     .facts {
-      display: grid; grid-template-columns: repeat(2,1fr);
-      gap: 8px; margin-bottom: 22px;
+      display: grid;
+      grid-template-columns: repeat(2,1fr);
+      gap: 10px;
+      margin-bottom: 22px;
     }
     .fact {
-      padding: 12px 14px;
+      padding: 13px 14px;
       border-radius: 16px;
       border: 1px solid rgba(255,255,255,.10);
       background: rgba(255,255,255,.055);
       box-shadow: inset 0 1px 0 rgba(255,255,255,.10);
       transition: transform 230ms, background 230ms;
+      display: grid;
+      gap: 4px;
     }
     .fact:hover {
       background: rgba(255,255,255,.09);
@@ -611,11 +680,14 @@
     .fact strong { font: 860 16px/1 "Segoe UI", sans-serif; }
 
     .trait-grid {
-      display: grid; grid-template-columns: repeat(2,1fr);
-      gap: 11px;
+      display: grid;
+      grid-template-columns: repeat(2,1fr);
+      gap: 12px;
     }
     .trait {
       padding: 15px 16px;
+      display: grid;
+      gap: 8px;
       border-radius: 18px;
       border: 1px solid rgba(255,255,255,.10);
       background: rgba(255,255,255,.045);
@@ -725,9 +797,13 @@
 
     .dot-list { list-style: none; display: grid; gap: 9px; }
     .dot-list li {
-      display: flex; gap: 10px; align-items: flex-start;
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
       color: rgba(255,255,255,.76);
-      font-size: 14px; font-weight: 600; line-height: 1.65;
+      font-size: 14px;
+      font-weight: 600;
+      line-height: 1.75;
     }
     .dot-list li::before {
       flex: 0 0 7px; width: 7px; height: 7px;
@@ -787,12 +863,20 @@
       50%     { opacity:1;   transform:translateY( 3px); }
     }
     @keyframes navIn {
-      from { opacity:0; transform:translateX(-50%) translateY(-10px); }
-      to   { opacity:1; transform:translateX(-50%) translateY(0);     }
+      from { opacity:0; transform:translateX(-50%) translateY(-12px) scale(.985); }
+      to   { opacity:1; transform:translateX(-50%) translateY(0) scale(1); }
+    }
+    @keyframes navFloat {
+      0%   { transform: translateX(-50%) translateY(0px); }
+      100% { transform: translateX(-50%) translateY(-2px); }
+    }
+    @keyframes navSweep {
+      0%   { transform: translateX(-55%); }
+      100% { transform: translateX(55%); }
     }
     @keyframes ripple {
       0%   { width:0;     height:0;     opacity:.5; }
-      100% { width:320px; height:320px; opacity:0;  }
+      100% { width:340px; height:340px; opacity:0;  }
     }
 
     @media (max-width: 920px) {
@@ -802,7 +886,13 @@
       .avatar-shell { max-width: 340px; }
     }
     @media (max-width: 640px) {
-      .site-nav { top: 8px; width: calc(100vw - 14px); border-radius: 22px; }
+      .site-nav {
+        top: 8px;
+        width: calc(100vw - 14px);
+        border-radius: 22px;
+        padding: 7px;
+        gap: 6px;
+      }
       .nav-btn  { min-height: 38px; padding: 0 10px; font-size: 12px; }
       .hero     { padding: 98px 16px 52px; }
       .section  { padding: 70px 16px; }
@@ -1170,7 +1260,7 @@
                     </div>
                   </div>
                   <div class="kuro-note">
-                    สมาชิกหลักในกลุ่มตอนนี้คือ vsgmpchannel คนเดียวที่รับหลายหน้าที่แบบครบวงจร
+                    ก็มีคนเดียวนั้นเเหละ
                   </div>
                 </div>
               </article>
