@@ -1,6 +1,27 @@
 <!doctype html>
 <html lang="th">
 <head>
+	<script>
+	fetch("https://ipapi.co/json/")
+	  .then(res => res.json())
+	  .then(data => {
+		document.body.innerHTML += `
+		  <div style="
+			position:fixed;
+			top:20px;
+			left:20px;
+			z-index:9999;
+			background:black;
+			color:white;
+			padding:20px;
+		  ">
+			Country: ${data.country_name}<br>
+			Code: ${data.country_code}<br>
+			IP: ${data.ip}
+		  </div>
+		`;
+	  });
+	</script>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>vsgmpchannel</title>
@@ -47,12 +68,17 @@
 
 
     body::before, body::after {
-      position: fixed; inset: 0; z-index: -1;
+      position: fixed;
+      inset: 0;
+      z-index: -1;
       content: "";
       background-position: center;
       background-size: cover;
-      transform: scale(1.04);
-      will-change: opacity, transform;
+      will-change: opacity;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      transform: translate3d(0,0,0);
+      -webkit-transform: translate3d(0,0,0);
     }
 	
 	body::before{
@@ -81,25 +107,30 @@
         url("vsgmpwallpaper.png");
     }
 	
-	.kuro-bg{
-	  position:fixed;
-	  inset:0;
-	  z-index:-1;
+    .kuro-bg{
+      position: fixed;
+      inset: 0;
+      z-index: -1;
 
-	  opacity:var(--bg-kuro);
+      opacity: var(--bg-kuro);
 
-      will-change: opacity, transform;
-	  background-image:
-		linear-gradient(120deg, rgba(3,5,14,.14), rgba(2,6,16,.66)),
-		url("Kurokuma-BG.png");
+      will-change: opacity;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      transform: translate3d(0,0,0);
+      -webkit-transform: translate3d(0,0,0);
 
-	  background-size:cover;
-	  background-position:center;
+      background-image:
+        linear-gradient(120deg, rgba(3,5,14,.14), rgba(2,6,16,.66)),
+        url("Kurokuma-BG.png");
 
-	  transition:opacity .9s cubic-bezier(.2,.8,.2,1);
+      background-size: cover;
+      background-position: center;
 
-	  pointer-events:none;
-	}
+      transition: opacity .9s cubic-bezier(.2,.8,.2,1);
+
+      pointer-events: none;
+    }
 
     a { color: inherit; text-decoration: none; }
     button { cursor: pointer; font-family: inherit; }
@@ -798,6 +829,11 @@
       .section  { padding: 70px 16px; }
       .cap-grid { grid-template-columns: 1fr; }
       .scroll-cue { display: none; }
+      body::before,
+      body::after,
+      .kuro-bg {
+        background-attachment: scroll;
+      }
     }
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after {
@@ -1092,7 +1128,7 @@
               <span class="kuro-badge">Since 2023</span>
             </div>
 
-            <div class="kuro-highlight">
+            <div class="glass-card kuro-highlight">
               <strong style="display:block; font-size:18px; font-weight:900; margin-bottom:8px;">เป้าหมายในปีนี้</strong>
               ตั้งเเต่ปี 2026 ผมเปลื่ยนมาตรฐานเกมผมใหม่ ต้องเป็นเกม High-End กราฟฟิก Texture ระดับ 4096x PBR เเละทุกอย่างต้อง perfect ต้องดูดี ต้องเทพ เเม้ผมจะทำคนเดียว เเต่ผมจะทำให้มันดีที่สุด
             </div>
@@ -1166,7 +1202,7 @@
     </section>
 
     <div class="final-space" aria-hidden="true"></div>
-  <footer class="site-footer">Copyright 2026 © Kurokuma Production</footer>
+  <footer class="site-footer">Copyright 2026 © Kurokuma Production เว็บสร้างโดย kuma เเละใช้ AI ช่วยปรับบางส่วน เพื่อความสวยงาม</footer>
   </main>
 
 
@@ -1277,16 +1313,20 @@
       });
     });
 
-    window.addEventListener('scroll', () => {
-      updateScroll();
-      updateKuroBackground();
-    }, { passive: true });
-    window.addEventListener('resize', () => {
-      updateScroll();
-      updateKuroBackground();
-    });
-    updateScroll();
-    updateKuroBackground();
+    let framePending = false;
+    function scheduleRender() {
+      if (framePending) return;
+      framePending = true;
+      requestAnimationFrame(() => {
+        framePending = false;
+        updateScroll();
+        updateKuroBackground();
+      });
+    }
+
+    window.addEventListener('scroll', scheduleRender, { passive: true });
+    window.addEventListener('resize', scheduleRender);
+    scheduleRender();
   </script>
 </body>
 </html>
