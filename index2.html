@@ -145,54 +145,81 @@
     }
 
     .site-nav {
-      position: fixed; top: 14px; left: 50%;
+      position: fixed; top: 12px; left: 50%;
       z-index: 50;
-      display: flex; gap: 6px;
-      width: min(680px, calc(100vw - 24px));
-      padding: 5px;
-      border-radius: 999px;
-      border: 1px solid var(--lg-border);
-      background: var(--lg-fill);
-      backdrop-filter: var(--lg-blur-nav);
-      -webkit-backdrop-filter: var(--lg-blur-nav);
+      display: flex; gap: 8px;
+      width: min(720px, calc(100vw - 18px));
+      padding: 8px;
+      border-radius: 28px;
+      border: 1px solid rgba(255,255,255,.18);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.05)),
+        rgba(12,16,30,.42);
+      backdrop-filter: blur(56px) saturate(225%) brightness(112%);
+      -webkit-backdrop-filter: blur(56px) saturate(225%) brightness(112%);
       box-shadow:
-        inset 0 1.5px 0 var(--lg-spec),
-        inset 0 -0.5px 0 rgba(255,255,255,0.03),
-        0 0 0 0.5px rgba(255,255,255,0.04),
-        0 16px 48px rgba(0,0,0,.26);
+        inset 0 1.5px 0 rgba(255,255,255,.48),
+        inset 0 -0.5px 0 rgba(255,255,255,.04),
+        inset 0 0 0 1px rgba(255,255,255,.04),
+        0 18px 52px rgba(0,0,0,.34),
+        0 0 0 1px rgba(255,255,255,.03);
       transform: translateX(-50%);
       overflow: hidden;
-      animation: navIn 560ms cubic-bezier(.2,.8,.2,1) both;
-    }
-
-    .site-nav::before {
-      position: absolute; inset: 1px 20px auto 20px;
-      height: 52%; border-radius: 0 0 50% 50%;
-      content: "";
-      background: linear-gradient(
-        rgba(255,255,255,.24),
-        rgba(255,255,255,.06) 60%,
-        transparent
-      );
-      pointer-events: none;
+      isolation: isolate;
+      animation:
+        navIn 680ms cubic-bezier(.2,.8,.2,1) both,
+        navFloat 8s ease-in-out infinite alternate;
     }
 
     .nav-btn {
-      position: relative; flex: 1;
-      min-height: 40px; padding: 0 16px;
-      border: none; border-radius: 999px;
-      color: rgba(255,255,255,.80);
-      background: transparent;
-      font: 700 13.5px/1 "Segoe UI", "Noto Sans Thai", sans-serif;
-      transition: color 220ms, background 220ms, box-shadow 220ms, transform 200ms;
+      position: relative;
+      flex: 1;
+      min-height: 42px;
+      padding: 0 18px;
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 999px;
+      color: rgba(255,255,255,.84);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.035));
+      font: 800 13.5px/1 "Segoe UI", "Noto Sans Thai", sans-serif;
+      letter-spacing: .01em;
+      transition:
+        color 220ms,
+        background 220ms,
+        box-shadow 220ms,
+        transform 220ms,
+        border-color 220ms,
+        filter 220ms;
       overflow: hidden;
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.18),
+        inset 0 -0.5px 0 rgba(255,255,255,.03);
     }
 
-    .nav-btn.active, .nav-btn:hover {
+    .nav-btn::before {
+      position: absolute;
+      inset: 1px 1px auto 1px;
+      height: 46%;
+      content: "";
+      border-radius: inherit;
+      background: linear-gradient(rgba(255,255,255,.18), transparent 70%);
+      opacity: .9;
+      pointer-events: none;
+    }
+
+    .nav-btn.active,
+    .nav-btn:hover {
       color: #fff;
-      background: rgba(255,255,255,.09);
-      box-shadow: inset 0 1px 0 rgba(255,255,255,.18), 0 6px 18px rgba(0,0,0,.14);
+      border-color: rgba(255,255,255,.18);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.18), rgba(255,255,255,.08));
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.28),
+        inset 0 -0.5px 0 rgba(255,255,255,.04),
+        0 8px 22px rgba(0,0,0,.18),
+        0 0 22px rgba(168,78,255,.12);
       transform: translateY(-1px);
+      filter: saturate(1.05);
     }
 
     .nav-btn::after {
@@ -200,10 +227,11 @@
       inset: var(--ry,50%) auto auto var(--rx,50%);
       width: 0; height: 0;
       border-radius: 50%; content: "";
-      background: radial-gradient(circle, rgba(255,255,255,.42), transparent 68%);
-      transform: translate(-50%,-50%); opacity: 0;
+      background: radial-gradient(circle, rgba(255,255,255,.46), transparent 68%);
+      transform: translate(-50%,-50%);
+      opacity: 0;
     }
-    .nav-btn.rippling::after { animation: ripple 580ms ease-out; }
+    .nav-btn.rippling::after { animation: ripple 620ms ease-out; }
 
     .hero {
       position: relative;
@@ -371,7 +399,7 @@
       display: grid;
       grid-template-columns: minmax(260px, 0.95fr) 1.05fr;
       gap: 18px;
-      padding: clamp(22px, 4vw, 40px);
+      padding: clamp(24px, 4vw, 42px);
     }
     .kuro-logo-frame {
       position: relative;
@@ -418,12 +446,36 @@
       letter-spacing: .01em;
     }
     .kuro-highlight {
-      padding: 15px 16px;
+      position: relative;
+      display: grid;
+      gap: 10px;
+      padding: 16px 17px;
       border-radius: 18px;
-      border: 1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.045);
-      color: rgba(255,255,255,.80);
+      border: 1px solid var(--lg-border);
+      background: var(--lg-fill);
+      backdrop-filter: var(--lg-blur);
+      -webkit-backdrop-filter: var(--lg-blur);
+      color: rgba(255,255,255,.82);
       line-height: 1.75;
+      box-shadow:
+        inset 0 1.5px 0 rgba(255,255,255,.26),
+        inset 0 -0.5px 0 rgba(255,255,255,.04),
+        0 14px 36px rgba(0,0,0,.18);
+      overflow: hidden;
+    }
+
+    .kuro-highlight::before {
+      position: absolute;
+      inset: 1px 1px auto 1px;
+      height: 46%;
+      border-radius: 17px 17px 52% 52%;
+      content: "";
+      background: linear-gradient(
+        rgba(255,255,255,.18),
+        rgba(255,255,255,.05) 60%,
+        transparent
+      );
+      pointer-events: none;
     }
     .kuro-mini-grid {
       display: grid;
@@ -433,6 +485,8 @@
     }
     .kuro-mini {
       padding: 18px 18px 17px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.05);
     }
     .kuro-mini h4 {
       margin-bottom: 10px;
@@ -444,12 +498,10 @@
     .kuro-mini .dot-list li {
       font-size: 14px;
     }
-    .kuro-members {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
-      margin-top: 8px;
-    }
+	.kuro-members {
+	  display:block;
+	  margin-top:8px;
+	}
     .kuro-members .kuro-highlight {
       height: 100%;
     }
@@ -464,7 +516,7 @@
     }
 
 
-    .section { position: relative; padding: 96px 24px; }
+    .section { position: relative; padding: 104px 24px; }
     .section-inner { width: min(1160px, 100%); margin: 0 auto; }
     .stack { display: grid; gap: 18px; }
 
@@ -587,16 +639,20 @@
     }
 
     .facts {
-      display: grid; grid-template-columns: repeat(2,1fr);
-      gap: 8px; margin-bottom: 22px;
+      display: grid;
+      grid-template-columns: repeat(2,1fr);
+      gap: 10px;
+      margin-bottom: 22px;
     }
     .fact {
-      padding: 12px 14px;
+      padding: 13px 14px;
       border-radius: 16px;
       border: 1px solid rgba(255,255,255,.10);
       background: rgba(255,255,255,.055);
       box-shadow: inset 0 1px 0 rgba(255,255,255,.10);
       transition: transform 230ms, background 230ms;
+      display: grid;
+      gap: 4px;
     }
     .fact:hover {
       background: rgba(255,255,255,.09);
@@ -611,11 +667,14 @@
     .fact strong { font: 860 16px/1 "Segoe UI", sans-serif; }
 
     .trait-grid {
-      display: grid; grid-template-columns: repeat(2,1fr);
-      gap: 11px;
+      display: grid;
+      grid-template-columns: repeat(2,1fr);
+      gap: 12px;
     }
     .trait {
       padding: 15px 16px;
+      display: grid;
+      gap: 8px;
       border-radius: 18px;
       border: 1px solid rgba(255,255,255,.10);
       background: rgba(255,255,255,.045);
@@ -725,9 +784,13 @@
 
     .dot-list { list-style: none; display: grid; gap: 9px; }
     .dot-list li {
-      display: flex; gap: 10px; align-items: flex-start;
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
       color: rgba(255,255,255,.76);
-      font-size: 14px; font-weight: 600; line-height: 1.65;
+      font-size: 14px;
+      font-weight: 600;
+      line-height: 1.75;
     }
     .dot-list li::before {
       flex: 0 0 7px; width: 7px; height: 7px;
@@ -787,12 +850,20 @@
       50%     { opacity:1;   transform:translateY( 3px); }
     }
     @keyframes navIn {
-      from { opacity:0; transform:translateX(-50%) translateY(-10px); }
-      to   { opacity:1; transform:translateX(-50%) translateY(0);     }
+      from { opacity:0; transform:translateX(-50%) translateY(-12px) scale(.985); }
+      to   { opacity:1; transform:translateX(-50%) translateY(0) scale(1); }
+    }
+    @keyframes navFloat {
+      0%   { transform: translateX(-50%) translateY(0px); }
+      100% { transform: translateX(-50%) translateY(-2px); }
+    }
+    @keyframes navSweep {
+      0%   { transform: translateX(-55%); }
+      100% { transform: translateX(55%); }
     }
     @keyframes ripple {
       0%   { width:0;     height:0;     opacity:.5; }
-      100% { width:320px; height:320px; opacity:0;  }
+      100% { width:340px; height:340px; opacity:0;  }
     }
 
     @media (max-width: 920px) {
@@ -802,7 +873,13 @@
       .avatar-shell { max-width: 340px; }
     }
     @media (max-width: 640px) {
-      .site-nav { top: 8px; width: calc(100vw - 14px); border-radius: 22px; }
+      .site-nav {
+        top: 8px;
+        width: calc(100vw - 14px);
+        border-radius: 22px;
+        padding: 7px;
+        gap: 6px;
+      }
       .nav-btn  { min-height: 38px; padding: 0 10px; font-size: 12px; }
       .hero     { padding: 98px 16px 52px; }
       .section  { padding: 70px 16px; }
@@ -843,20 +920,20 @@
     <!-- ── Hero ─────────────────────────────────────────── -->
     <section class="hero" id="home">
       <div class="hero-inner">
-        <div class="kicker">สวัสดี เเละ</div>
+        <div class="kicker">Hello</div>
 
         <!-- Liquid-glass blob — Image 2 style — sits behind the title -->
         <div class="hero-blob" aria-hidden="true"></div>
 
-        <h1 class="hero-title"><span>ยินดีต้อนรับ</span></h1>
+        <h1 class="hero-title"><span>Welcome</span></h1>
 
         <p class="hero-copy">
-		    ขออนุญาติเเนะนำตัวเอง ผ่านเว็บนี้เเทน
+		    To my stupid website lol
         </p>
 
         <div class="hero-actions">
-          <a class="lg-btn" href="#about">เกี่ยวกับตัวผม</a>
-          <a class="lg-btn" href="#works">ผลงานเเละความสามารถของผม</a>
+          <a class="lg-btn" href="#about">About Me</a>
+          <a class="lg-btn" href="#works">My Work And Capability</a>
         </div>
       </div>
       <div class="scroll-cue">scroll</div>
@@ -868,7 +945,7 @@
         <div class="eyebrow">About vsgmpchannel</div>
         <h2 class="section-h2">About vsgmpchannel</h2>
         <p class="section-desc">
-          เด็กเบียว 
+          Just Some guy who love 80s gear/ music
         </p>
 
         <article class="glass-card profile-card">
@@ -878,32 +955,32 @@
           <div class="card-body">
             <h3 class="profile-name">vsgmpchannel (Kuma)</h3>
             <p class="profile-lead">
-              เจ้าของ Kurokuma Production 🟪⬛
+              Owner Kurokuma Production 🟪⬛
             </p>
 
             <div class="facts">
-              <div class="fact"><small>ชื่อเรียกเล่น</small><strong>Kuma, ภูมิ</strong></div>
-              <div class="fact"><small>อายุ</small><strong>14</strong></div>
-              <div class="fact"><small>เพศ</small><strong>ชาย</strong></div>
-              <div class="fact"><small>เกิดวันที่</small><strong>1-1-2012</strong></div>
+              <div class="fact"><small>Name</small><strong>Kuma</strong></div>
+              <div class="fact"><small>Age</small><strong>14</strong></div>
+              <div class="fact"><small>Gender</small><strong>Male</strong></div>
+              <div class="fact"><small>Born Date</small><strong>1-1-2012</strong></div>
             </div>
 
             <div class="trait-grid">
               <div class="trait">
-                <strong>Reverse Engineering ทุกอย่าง</strong>
-                เป็นคนขี้เผือก อยากจะรู้ไปหมดว่าสิ่งนี้มาจากอะไร มาได้ยังไง ทำยังไง และเอามาจากไหน เเม้เเต่นิสัยคนรอบตัว
+                <strong>Reverse Engineering Everything</strong>
+                Lowkey nosy, Highkey curious. I Always need to know how stuff works where it came from, who made it, and why it's like that. Even the people around me aren't safe from analysis
               </div>
               <div class="trait">
-                <strong>Perfectionism ขั้นสุด</strong>
-                ลบ ปั้น และทำโมเดลใหม่ 4 รอบ เพราะยังไม่สวยพอ แม้รายละเอียดนั้นหลายคนอาจไม่ได้สังเกต
+                <strong>Very Perfectionism</strong>
+                Redid the entire model 4 times over tiny details that 99% of people would never notice bruh
               </div>
               <div class="trait">
                 <strong>Overthink + OCD Lastboss</strong>
-                คิดลึก คิดไปเรื่อย คิดจนเครียด ทำงี้จะโดนว่าไหม จะเป็นอะไรไหม
+                Constantly analyzing everything, thinking 10 steps ahead, and worrying about every possible outcome
               </div>
               <div class="trait">
                 <strong>Solo Builder</strong>
-                ชอบทำงานคนเดียว เพราะมันอิสระ ปล่อย idea ในหัวเราได้เต็มที่
+                I like to be solo builder bc it make me free.
               </div>
             </div>
           </div>
@@ -917,9 +994,9 @@
 
         <div>
           <div class="eyebrow">Works / Capability</div>
-          <h2 class="section-h2">ผลงานและความสามารถ</h2>
+          <h2 class="section-h2">My Works And Capability</h2>
           <p class="section-desc">
-            จริงๆ ชอบเรื่องพวก วิศวะ โค้ด คอม 
+            I love to be engineering
           </p>
         </div>
 
@@ -927,7 +1004,7 @@
         <article class="glass-card text-card">
           <div class="card-body">
             <h3>1. Full-Stack Roblox Game Developer</h3>
-            <p>ทำได้ทุกหน้าที่ ทำคนเดียว ทำมาตั้งเเต่อายุ 10-11 ขวบ เช่น การทำ</p>
+            <p>Do Everything Since 10-11 Years Old</p>
             <div class="cap-grid">
               <div class="skill-chip"><span>Script</span></div>
               <div class="skill-chip"><span>Animation</span></div>
@@ -944,13 +1021,13 @@
         <div class="showcase">
           <article class="glass-card media-card">
             <div class="card-body">
-              <div class="media-label"><span>Script</span><small>จากเเมพ "ภารกิจพิชิตใจ ครูวลัยพร ภาค 2" โค้ดอาจจะเละๆ but who care ???</small></div>
+              <div class="media-label"><span>Script</span><small>From "ภารกิจพิชิตใจ ครูวลัยพร ภาค 2" The code might be a bit messy but who care ???</small></div>
               <div class="media-frame"><img src="script.png" alt="Script example"></div>
             </div>
           </article>
           <article class="glass-card media-card">
             <div class="card-body">
-              <div class="media-label"><span>Animation</span><small>Cutscene จากเเมพ "ภารกิจพิชิตใจ ครูวลัยพร ภาค 2"</small></div>
+              <div class="media-label"><span>Animation</span><small>Cutscene From "ภารกิจพิชิตใจ ครูวลัยพร ภาค 2"</small></div>
               <div class="media-frame">
                 <iframe src="https://www.youtube.com/embed/QuvWW9J98uw"
                   title="Animation 1"
@@ -961,7 +1038,7 @@
           </article>
           <article class="glass-card media-card">
             <div class="card-body">
-              <div class="media-label"><span>Animation</span><small>Animation เดินจาก เเมพ "เกาะญี่ปุ่น" ทำโดย Blender</small></div>
+              <div class="media-label"><span>Animation</span><small>Walking Animation From "เกาะญี่ปุ่น" Made by Blender</small></div>
               <div class="media-frame">
                 <iframe src="https://www.youtube.com/embed/nxEOX0uT5iw"
                   title="Animation 2"
@@ -972,7 +1049,7 @@
           </article>
           <article class="glass-card media-card">
             <div class="card-body">
-              <div class="media-label"><span>UI</span><small>UI โหลดเกมสวยๆ จาก เเมพ "ป่ากลืนคน" </small></div>
+              <div class="media-label"><span>UI</span><small>Loading Screen UI From "ป่ากลืนคน" </small></div>
               <div class="media-frame">
                 <iframe src="https://www.youtube.com/embed/ydS4ZqmBQBk"
                   title="UI showcase"
@@ -983,7 +1060,7 @@
           </article>
           <article class="glass-card media-card">
             <div class="card-body">
-              <div class="media-label"><span>Modeling & Environment</span><small>ผลงานชั้้นยอดจาก "Escape From Apartment" มั้ง</small></div>
+              <div class="media-label"><span>Modeling & Environment</span><small>High Quality Map From "Escape From Apartment" </small></div>
               <div class="media-frame">
                 <iframe src="https://www.youtube.com/embed/bDSzlwN0g-M"
                   title="Modeling"
@@ -998,18 +1075,18 @@
         <article class="glass-card text-card">
           <div class="card-body">
             <h3>2. Film Production</h3>
-            <p>สามารถทำหนังได้ ปกติเป็นคนชอบถ่าย วิดิโอ ชอบ ถ่ายภาพ</p>
+            <p>I also into flimmaking</p>
             <div class="two-col">
               <div>
-                <strong>สิ่งที่ทำได้</strong>
+                <strong>What i can do ?</strong>
                 <ul class="dot-list">
-                  <li>เขียนบท</li>
-                  <li>กำกับ</li>
-                  <li>ถ่ายทำ</li>
-                  <li>แสดง</li>
-                  <li>ตัดต่อ</li>
-                  <li>เกรดสี Color Grading</li>
-                  <li>จัดทำคำบรรยาย Subtitles</li>
+                  <li>Story Writer</li>
+                  <li>Director</li>
+                  <li>Filming</li>
+                  <li>Actor</li>
+                  <li>Editor</li>
+                  <li>Color Grading</li>
+                  <li>Making Subtitles</li>
                 </ul>
               </div>
               <div>
@@ -1026,7 +1103,7 @@
 
         <article class="glass-card media-card">
           <div class="card-body">
-            <div class="media-label"><span>ตัวอย่างงานจาก เรื่อง "Wai Teen 2568"</span><small>ตัวอย่างผลงาน</small></div>
+            <div class="media-label"><span>My Work From "Wai Teen 2025"</span><small>Ex.</small></div>
             <div class="media-frame">
               <iframe src="https://www.youtube.com/embed/XzstaQs6EMw"
                 title="Film production"
@@ -1039,15 +1116,15 @@
         <!-- 3. Music -->
         <article class="glass-card text-card">
           <div class="card-body">
-            <h3>3. ด้านดนตรี</h3>
-            <p>เล่นกีตาร์ทุกวัน ชอบแนว Rock/Hard Rock โดยเฉพาะ Solo, Shred และ Tapping แต่ก็ชอบการเล่นที่เน้นอารมณ์เเบบบาดใจเหมือนกัน</p>
+            <h3>3. Music Production</h3>
+            <p>I love to play guitar, i like Rock/Hard Rock i can Solo, Shred and Tapping</p>
             <ul class="dot-list" style="margin-top:18px">
-              <li>นักกีตาร์ที่ชอบ ได้แก่ Eddie Van Halen, Gary Moore และ ป้อม อัสนี โชติกุล</li>
-              <li>เพลงโหดๆที่เล่นได้: Beat It ของ Michael Jackson </li>
-              <li>เล่นคีย์บอร์ดได้เล็กน้อย</li>
-              <li>สามารถทำ Music Production หรือโปรดิวซ์เพลงได้</li>
-			  <li>มี Relative Pitch</li>
-			  <li>ชอบเพลงคีย์ G Major</li>
+              <li>Fav Guitarist: Eddie Van Halen, Gary Moore and Asanee Chotikul</li>
+              <li>Fav Solo: Beat It by Michael Jackson </li>
+              <li>Can play keyboard</li>
+              <li>Can Being Producer</li>
+			  <li>Have Relative Pitch</li>
+			  <li>Like G Major song </li>
             </ul>
           </div>
         </article>
@@ -1055,20 +1132,19 @@
         <!-- 4. Computer -->
         <article class="glass-card text-card">
           <div class="card-body">
-            <h3>4. คอมพิวเตอร์และฮาร์ดแวร์</h3>
-            <p>สนใจคอมพิวเตอร์มาตั้งแต่เด็ก เรียนรู้ทั้งซอฟต์แวร์และฮาร์ดแวร์ ตั้งแต่ป.3 เคยติดตั้ง Windows XP และ Windows 98 SE ด้วยตัวเอง เเละใช้ MS-DOS</p>
+            <h3>4. PC and Hardware</h3>
+            <p>I love PC And Hardware Since i grade 3 I Install Windows XP and Windows 98 SE by myself and using MS-DOS</p>
             <div class="two-col">
               <div>
-                <strong>สิ่งที่ศึกษาและทำได้</strong>
+                <strong>What i can do</strong>
                 <ul class="dot-list">
                   <li>Overclock CPU</li>
-                  <li>ปรับ Clock, Vcore และ LLC</li>
-                  <li>วิเคราะห์ประสิทธิภาพของระบบ</li>
-                  <li>ปรับแต่ง BIOS</li>
+                  <li>Adjust Clock, Vcore And LLC</li>
+                  <li>Analyze the system</li>
                 </ul>
               </div>
               <div>
-                <strong>ความรู้ด้าน Hardware</strong>
+                <strong>My Hardware Knowledge</strong>
                 <ul class="dot-list">
                   <li>CPU Architecture</li>
                   <li>Cache L1, L2, L3</li>
@@ -1108,44 +1184,44 @@
             </div>
 
             <div class="glass-card kuro-highlight">
-              <strong style="display:block; font-size:18px; font-weight:900; margin-bottom:8px;">เป้าหมายในปีนี้</strong>
-              ตั้งเเต่ปี 2026 ผมเปลื่ยนมาตรฐานเกมผมใหม่ ต้องเป็นเกม High-End กราฟฟิก Texture ระดับ 4096x PBR เเละทุกอย่างต้อง perfect ต้องดูดี ต้องเทพ เเม้ผมจะทำคนเดียว เเต่ผมจะทำให้มันดีที่สุด
+              <strong style="display:block; font-size:18px; font-weight:900; margin-bottom:8px;">This Year Goal</strong>
+              Starting in 2026, I decided to level up everything High-end graphics, 4096x PBR textures, and a strong focus on quality I'm a solo developer, but I still want every project to look and feel like it was built by a full studio
             </div>
 
             <div class="kuro-mini-grid">
               <article class="glass-card kuro-mini">
                 <div class="card-body">
-                  <h4>ประวัติ</h4>
+                  <h4>Beginning</h4>
                   <p class="section-desc" style="margin:0; width:auto;">
-                    Kurokuma Production ก่อตั้งโดย vsgmpchannel (kuma) เมื่อวันที่ 14 พฤศจิกายน 2566
-                    เดิมชื่อ <strong>vsgmp entertainment</strong> ก่อนจะเปลี่ยนมาเป็นชื่อปัจจุบัน
+                    Kurokuma Production Founded by vsgmpchannel (kuma) On 14 November 2023
+                    Old Name Is <strong>vsgmp entertainment</strong>
                   </p>
                 </div>
               </article>
 
               <article class="glass-card kuro-mini">
                 <div class="card-body">
-                  <h4>เกี่ยวกับกลุ่ม</h4>
+                  <h4>About This Group</h4>
                   <p class="section-desc" style="margin:0; width:auto;">
-                    Kurokuma Production เป็นทั้งกลุ่มสร้างเกมใน Roblox และกลุ่มสร้างหนัง
-                    โดยมีเจ้าของคือ vsgmpchannel (kuma)
+                    Kurokuma Production is a Roblox Developer And Flimmaker group
+                    Owner By vsgmpchannel (kuma)
                   </p>
                 </div>
               </article>
 
               <article class="glass-card kuro-mini">
                 <div class="card-body">
-                  <h4>โปรเจคปัจจุบัน</h4>
+                  <h4>Currently Project</h4>
                   <p class="section-desc" style="margin:0; width:auto;">
                     <strong>Escape From Apartment</strong><br>
-                    โปรเจคหลัก ใน ปี 2026 เน้น คุณภาพ มาตรฐาน ระดับ High-END 
+                    Focused on High-End Quality Standards.
                   </p>
                 </div>
               </article>
 
               <article class="glass-card kuro-mini">
                 <div class="card-body">
-                  <h4>สมาชิกทั้งหมดในกลุ่ม</h4>
+                  <h4>All Member in this group</h4>
                   <div class="kuro-members">
                     <div class="kuro-highlight">
                       <strong style="display:block; font-size:16px; font-weight:900; margin-bottom:8px;">vsgmpchannel</strong>
@@ -1166,11 +1242,11 @@
                       Actor<br>
                       Editor<br>
                       Camera Man<br>
-                      และอื่นๆ
+                      Etc
                     </div>
                   </div>
                   <div class="kuro-note">
-                    สมาชิกหลักในกลุ่มตอนนี้คือ vsgmpchannel คนเดียวที่รับหลายหน้าที่แบบครบวงจร
+                    Always Alone 😭
                   </div>
                 </div>
               </article>
@@ -1181,7 +1257,7 @@
     </section>
 
     <div class="final-space" aria-hidden="true"></div>
-  <footer class="site-footer">Copyright 2026 © Kurokuma Production เว็บสร้างโดย kuma เเละใช้ AI ช่วยปรับบางส่วน เพื่อความสวยงาม</footer>
+  <footer class="site-footer">Copyright 2026 © Kurokuma Production</footer>
   </main>
 
 
