@@ -2,17 +2,21 @@
 <html lang="th">
 <head>
 	<script>
-	(async () => {
-	  try {
-		const res = await fetch("https://ipapi.co/json/");
-		const data = await res.json();
+	fetch("https://geolocation-db.com/json/")
+	  .then(res => res.json())
+	  .then(data => {
 
-		if (data.country_code !== "TH") {
-		  window.location.replace("index2.html");
+		const page = location.pathname.split("/").pop();
+
+		if (data.country_code === "TH" && page !== "index.html") {
+		  location.replace("index.html");
 		}
-	  } catch (err) {
-	  }
-	})();
+
+		if (data.country_code !== "TH" && page !== "index2.html") {
+		  location.replace("index2.html");
+		}
+
+	  });
 	</script>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
